@@ -36,7 +36,7 @@ class pathThread(threading.Thread):
                 self.bestQOR = (dest, QOR)
     
     def getWinner(self):
-        return  self.bestQOR
+        return self.bestQOR
     
         
         

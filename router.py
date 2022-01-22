@@ -153,3 +153,6 @@ class router:
     
     def getRegionalRec(self):
         return self.regRecPlaces
+    
+    def getMaster(self):
+        return masterList
