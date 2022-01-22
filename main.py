@@ -6,10 +6,12 @@ from validator import *
 masterList = []
 
 def getBestQOR( currentLocation, listofDestinations):
-    print(id)
+    print(id)  
     global masterList
     
-def startThreading(current, list1, list2, list3, list4):
+def findBest(current, bigList):
+    size = len(bigList)
+    list2, list3, list4
     one = threading.Thread(target=getBestQOR, args=(current, list1,))
     two = threading.Thread(target=getBestQOR, args=(current, list2, ))
     three = threading.Thread(target=getBestQOR, args=(current, list3, ))
@@ -24,7 +26,6 @@ def startThreading(current, list1, list2, list3, list4):
     two.join()
     three.join()
     four.join()
-    
     
 def main():
     print("Hello World")
@@ -54,14 +55,17 @@ def main():
 
     #Collect Waste
     
+    
     #Find Local Sorting
-    startThreading()
+    findBest()
+    
+    
     
     #Find Regional Sorting
-    startThreading()
+    findBest()
     
     #Find Regional Recycling
-    startThreading()
+    findBest()
     
     
     # minQor = 100
@@ -70,9 +74,11 @@ def main():
     #         minQor == pair[0]
     
     #Writing to final CSV
+    idDesignation = 0
     finalFile = open("finalFile.csv", "w")
     for item in masterList:
-        finalFile.write()
+        # id -- coord1, coord2, type, 
+        finalFile.write( idDesignation, item[], item[], item[])
     finalFile.close()
     
 if __name__ == "__main__":
