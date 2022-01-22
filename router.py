@@ -1,12 +1,16 @@
 import collections
 import queue
 import threading
+from turtle import towards
 from plasticObject import plasticObject
 from validator import *
 from plasticObject import plasticObject
- 
+from pathThread import pathThread
+
 masterList = []
 bestQOR = []
+
+testing = 0
 
 listID = 0
 listLat = 1
@@ -19,90 +23,79 @@ listRisk = 5
 # Route Calculation File
 # ==============================================================================
 class router:
-  
-    def __init__(self, fileName):
+
+    def __init__(self, fileName, mode):
         self.fileName = fileName
         self.inputList = []
         self.wastePlaces = []
         self.localSortPlaces = []
         self.regSortPlaces = []
         self.regRecPlaces = []
+        self.mode = mode
     
-    def getBestQOR( threadID, currentLocation, listofDestinations):
-        print(threadID)  
-        global masterList
-        global bestQOR
-        
-        # Non Path Avoidence
-        mapHeight = 400
-        mapWidth = 400
-        ##########################
-        start = (currentLocation.get(),currentLocation.get)
-        
-        for dest in listofDestinations:  
-            stop = (dest.get(), dest.get())
-            
-            que = collections.deque()
-            visited = set([start])
-            
-            while queue:
-                path = queue.popleft()
-                x, y = path[-1]
-                if (x,y) == stop:
-                    print("Found a Path")
-                    ## QOR calculator
-                    QOR = len(path) * dest.getRisk()
-                    
-                    # IF Empty == store it
-                    if (bestQOR[threadID] == None):
-                        bestQOR[threadID] = (dest, QOR)
-                    #else if better value, then add
-                    elif (bestQOR[threadID][1] > QOR):
-                        bestQOR[threadID] = (dest, QOR)
-                    
-                for x2, y2 in ((x+1,y), (x-1,y), (x,y+1), (x,y-1)):
-                    if 0 <= x2 < mapWidth and 0 <= y2 < mapHeight and (x2, y2) not in visited:
-                        que.append(path + [(x2, y2)])
-                        visited.add((x2, y2))
-                      
-    def findBest(current, bigList):
+    def findBest(self, current, bigList):
         size = len(bigList)
         halfway = size/2
-        
-        if halfway.is_integer():
-            halfway = int(halfway)
+        halfway = int(halfway)
         
         quarter = halfway/2
-        if quarter.is_integer():
-            quarter = int(halfway)
+        quarter = int(quarter)
         
         list1 = bigList[0:quarter]
         list2 = bigList[quarter:halfway]
         list3 = bigList[halfway:halfway+quarter]
         list4 = bigList[halfway+quarter:size]
         
-        one = threading.Thread(target=getBestQOR, args=(1, current, list1,))
-        two = threading.Thread(target=getBestQOR, args=(2, current, list2, ))
-        three = threading.Thread(target=getBestQOR, args=(3, current, list3, ))
-        four = threading.Thread(target=getBestQOR, args=(4, current, list4, ))
+        print("Half = {} and Quarter = {}".format(halfway, quarter))
+        
+        one = pathThread(1, current, list1)
+        two = pathThread(2, current, list2)
+        three = pathThread(3, current, list3)
+        four = pathThread(4, current, list4)
         
         one.start()
         two.start()
         three.start()
         four.start()
         
-        one.join()
-        two.join()
+        one.join()  
+        two.join() 
         three.join()
         four.join()
         
-    def routeCalc(self):
-        self.inputList = read_from_csv("test_cases/small/{}".format(self.filename))
+        winners = [one.getWinner(), two.getWinner(), three.getWinner(), four.getWinner()]
+        lowest = 0
         
-        #generating list destinations
+        print("Winners")
+        print (winners)
+        for win in winners:
+            if lowest == 0:
+                lowest = win[1]
+            elif win[1] < lowest:
+                lowest = win[1]  
+                lowestDest = win[0]
+        
+        masterList.append(lowestDest)
+        
+    def routeCalc(self):
+        if self.mode == "Y":
+            print("Reading CSV")
+        try:
+            self.inputList = read_from_csv("test_cases/small/{}".format(self.fileName))
+        except:
+            print("CSV Error")
+            exit()
+        
+        #Giving access to routeCalc to modify masterList.
+        #Adds inital waste sites as they are to be visited
+        global masterList
+        
+        #Generating list of all destinations
         for item in self.inputList:
-            #generating list of waste
-            mapObject = plasticObject(item[listID], item[listLat], item[listLong], item[listType], item[listValue], item[listRisk])
+            #Mapping each line of CSV to a Plastic Object
+            mapObject = plasticObject(item[listID], item[listType], item[listLat], item[listLong], item[listValue], item[listRisk])
+            
+            #Generating list of waste sites
             if mapObject.getObjectType() == "waste":
                 self.wastePlaces.append(mapObject)
                 masterList.append(mapObject)
@@ -124,6 +117,8 @@ class router:
         # Waste is already collected as it has been appended to master list
         # ======================================================================
         
+        print(masterList[-1].getObjectType())
+        
         #Find Local Sorting
         self.findBest(masterList[-1], self.localSortPlaces)
         
@@ -143,7 +138,7 @@ class router:
         idDesignation = 0
         finalFile = open("finalFile.csv", "w")
         for item in masterList:
-            finalFile.write("{},{},{},{},{},{}\n".format(idDesignation, item.getLatCord, item.getLongCord, item.getObjectType, item.getPlasticAmount, item.getRisk))
+            finalFile.write("{},{},{},{},{},{}\n".format(idDesignation, item.getLatCord(), item.getLongCord(), item.getObjectType(), item.getPlasticAmount(), item.getRisk()))
             idDesignation = idDesignation + 1
         finalFile.close()
         
