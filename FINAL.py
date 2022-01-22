@@ -28,5 +28,6 @@ rout.getRegionalRec()
 # ==============================================================================
 # CODE FOR EXTRACTING FINAL DESTINATION ROUTE. [plasticObjects]
 # ==============================================================================
-for item in masterList:
+master = rout.getMaster()
+for item in master:
     print(item.getObjectType(), item.getLatCord(), item.getLongCord())

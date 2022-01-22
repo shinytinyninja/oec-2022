@@ -1,17 +1,9 @@
-import collections
-import queue
-import threading
-from turtle import towards
 from plasticObject import plasticObject
 from validator import *
 from plasticObject import plasticObject
 from pathThread import pathThread
 
-masterList = []
-bestQOR = []
-
-testing = 0
-
+#STATIC VARIABLES, NOT TO BE CHANGED
 listID = 0
 listLat = 1
 listLong = 2
@@ -20,10 +12,13 @@ listValue = 4
 listRisk = 5
 
 # ==============================================================================
-# Route Calculation File
+# Route Calculation Function
+# This will, using multi-threading computer the path of lowest QOR Score
 # ==============================================================================
 class router:
-
+    # Constructor of class.
+    # Establishing the destinations of sorting and variables to be used later on
+    # mode is for debugging
     def __init__(self, fileName, mode):
         self.fileName = fileName
         self.inputList = []
@@ -32,7 +27,10 @@ class router:
         self.regSortPlaces = []
         self.regRecPlaces = []
         self.mode = mode
+        self.masterList = []
     
+    # Function for finding the best next destination
+    # Using the "current" position of our boat, find the next best distination with lowest QOR score
     def findBest(self, current, bigList):
         size = len(bigList)
         halfway = size/2
@@ -75,7 +73,7 @@ class router:
                 lowest = win[1]  
                 lowestDest = win[0]
         
-        masterList.append(lowestDest)
+        self.masterList.append(lowestDest)
         
     def routeCalc(self):
         if self.mode == "Y":
@@ -89,7 +87,7 @@ class router:
         
         #Giving access to routeCalc to modify masterList.
         #Adds inital waste sites as they are to be visited
-        global masterList
+        # global masterList
         
         #Generating list of all destinations
         for item in self.inputList:
@@ -99,7 +97,7 @@ class router:
             #Generating list of waste sites
             if mapObject.getObjectType() == "waste":
                 self.wastePlaces.append(mapObject)
-                masterList.append(mapObject)
+                self.masterList.append(mapObject)
                 
             #generating list of waste
             elif mapObject.getObjectType() == "local_sorting_facility":
@@ -118,16 +116,16 @@ class router:
         # Waste is already collected as it has been appended to master list
         # ======================================================================
         
-        print(masterList[-1].getObjectType())
+        print(self.masterList[-1].getObjectType())
         
         #Find Local Sorting
-        self.findBest(masterList[-1], self.localSortPlaces)
+        self.findBest(self.masterList[-1], self.localSortPlaces)
         
         #Find Regional Sorting
-        self.findBest(masterList[-1], self.regSortPlaces)
+        self.findBest(self.masterList[-1], self.regSortPlaces)
         
         #Find Regional Recycling
-        self.findBest(masterList[-1], self.regRecPlaces)
+        self.findBest(self.masterList[-1], self.regRecPlaces)
         
         
         # minQor = 100
@@ -138,7 +136,7 @@ class router:
         #Writing to final CSV
         idDesignation = 0
         finalFile = open("finalFile.csv", "w")
-        for item in masterList:
+        for item in self.masterList:
             finalFile.write("{},{},{},{},{},{}\n".format(idDesignation, item.getLatCord(), item.getLongCord(), item.getObjectType(), item.getPlasticAmount(), item.getRisk()))
             idDesignation = idDesignation + 1
         finalFile.close()
@@ -156,4 +154,4 @@ class router:
         return self.regRecPlaces
     
     def getMaster(self):
-        return masterList
+        return self.masterList
