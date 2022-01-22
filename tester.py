@@ -19,18 +19,11 @@ localSorters = rout.getLocalSort()
 regionalSorters = rout.getRegionalSort()
 recyclers = rout.getRegionalRec()
 
+routeList = rout.getMaster()
+
 # create application window
 app = Tk("OEC-2022")
 app.geometry("800x850")
-
-# def get_x_and_y(event):
-#     global lasx, lasy
-#     lasx, lasy = event.x, event.y
-
-# def draw_smth(event):
-#     global lasx, lasy
-#     canvas.create_line((lasx, lasy, event.x, event.y), fill='red', width=2)
-#     lasx, lasy = event.x, event.y
 
 # create legend
 topFrame = Frame(app)
@@ -82,18 +75,9 @@ for r in recyclers:
     canvas.create_oval((r.getLatCord()-2, r.getLongCord()-2, r.getLatCord().get+3, r.getLongCord()+3), fill='red') # recycler is red
 
 # direct path
-for 
-# canvas.bind("<Button-1>", get_x_and_y)
-# canvas.bind("<B1-Motion>", draw_smth)
-
-
-
-# path=r'C:\Users\Zotac\Desktop\OEC 2022\oec-2022\picture.jpg'
-# image = Image.open(path)
-# image = image.resize((400,400), Image.ANTIALIAS)
-# image = ImageTk.PhotoImage(image)
-# canvas.create_image(0,0, image=image, anchor='nw')
-
+for route in range(0, len(routeList)):
+    tempObject = routeList[route + 1]
+    canvas.create_line((routeList.getLatCord()-2, routeList.getLongCord()-2, tempObject.getLatCord().get+3, tempObject.getLongCord()+3), fill='black', width="2")
 
 app.mainloop()
 

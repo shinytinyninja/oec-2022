@@ -1,7 +1,7 @@
 from router import *
 
 #INPUT FROM THE USER
-file = "test_10_equal"
+file = "test_10_equal.csv"
 
 #MODE: JUST LEAVE AS N
 mode = "N"
