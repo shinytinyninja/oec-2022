@@ -79,7 +79,7 @@ class router:
         if self.mode == "Y":
             print("Reading CSV")
         try:
-            self.inputList = read_from_csv("test_cases/small/{}".format(self.fileName))
+            self.inputList = read_from_csv("test_cases/{}".format(self.fileName))
                   
         except:
             print("CSV Error")
