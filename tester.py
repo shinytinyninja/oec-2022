@@ -1,6 +1,7 @@
 from tkinter import *
 from router import *
 
+
 # file = input("Name of file: ")
 
 file = "test_10_equal"
@@ -66,18 +67,21 @@ canvas.pack(side="bottom")
 # get waste objects
 
 for w in waste:
-    canvas.create_oval((w.getLatCord()-2, w.getLongCord()-2, w.getLatCord().get+3, w.getLongCord()+3), fill='green') # waste is green
+    canvas.create_oval((int(w.getLatCord())+200*2-2, int(w.getLongCord())+200*2-2, int(w.getLatCord())+200*2+3, int(w.getLongCord())+200*2+3), fill='green') # waste is green
 for localSort in localSorters:
-    canvas.create_oval((localSort.getLatCord()-2, localSort.getLongCord()-2, localSort.getLatCord().get+3, localSort.getLongCord()+3), fill='yellow') # local sorter is yellow
+    canvas.create_oval((int(localSort.getLatCord())+200*2-2, int(localSort.getLongCord())+200*2-2, int(localSort.getLatCord())+200*2+3, int(localSort.getLongCord())+200*2+3), fill='yellow') # local sorter is yellow
 for regSort in regionalSorters:
-    canvas.create_oval((regSort.getLatCord()-2, regSort.getLongCord()-2, regSort.getLatCord().get+3, regSort.getLongCord()+3), fill='orange') # regional sorter is orange
+    canvas.create_oval((int(regSort.getLatCord())+200*2-2, int(regSort.getLongCord())+200*2-2, int(regSort.getLatCord())+200*2+3, int(regSort.getLongCord())+200*2+3), fill='orange') # regional sorter is orange
 for r in recyclers:
-    canvas.create_oval((r.getLatCord()-2, r.getLongCord()-2, r.getLatCord().get+3, r.getLongCord()+3), fill='red') # recycler is red
+    canvas.create_oval((int(r.getLatCord())+200*2-2, int(r.getLongCord())+200*2-2, int(r.getLatCord())+200*2+3, int(r.getLongCord())+200*2+3), fill='red') # recycler is red
 
 # direct path
 for route in range(0, len(routeList)):
-    tempObject = routeList[route + 1]
-    canvas.create_line((routeList.getLatCord()-2, routeList.getLongCord()-2, tempObject.getLatCord().get+3, tempObject.getLongCord()+3), fill='black', width="2")
+    try:
+        tempObject = routeList[route + 1]
+    except IndexError:
+        print("")
+    canvas.create_line((int(routeList[route].getLatCord())+200*2-2, int(routeList[route].getLongCord())+200*2-2, int(tempObject.getLatCord())+200*2+3, int(tempObject.getLongCord())+200*2+3), fill='black', width="2")
 
 app.mainloop()
 
