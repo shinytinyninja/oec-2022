@@ -1,5 +1,4 @@
 from tkinter import *
-from PIL import Image, ImageTk
 
 app = Tk("OEC-2022")
 app.geometry("800x850")
