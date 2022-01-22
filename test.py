@@ -1,11 +1,10 @@
-import datetime
+quarter = 3
+half = 6
 
-a = datetime.datetime.now()
-b = 0
-for i in range(0,999999):
-    b = b + 1
+list = [1,2,3,4,5,6,7,8,9,10,11,12]
+size = len(list)
 
-b = datetime.datetime.now()
-
-print(b-a)
-
+print(list[0:quarter])
+print(list[quarter:half])
+print(list[half:half+quarter])
+print(list[half+quarter:size])
