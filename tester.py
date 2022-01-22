@@ -1,8 +1,27 @@
 from tkinter import *
+from router import *
 
+# file = input("Name of file: ")
+
+file = "test_10_equal"
+
+print(file)
+
+mode = "N"
+rout = router(file, mode)
+
+# main calculations
+rout.routeCalc()
+
+# get all items to place
+waste = rout.getWaste()
+localSorters = rout.getLocalSort()
+regionalSorters = rout.getRegionalSort()
+recyclers = rout.getRegionalRec()
+
+# create application window
 app = Tk("OEC-2022")
 app.geometry("800x850")
-
 
 # def get_x_and_y(event):
 #     global lasx, lasy
@@ -12,6 +31,8 @@ app.geometry("800x850")
 #     global lasx, lasy
 #     canvas.create_line((lasx, lasy, event.x, event.y), fill='red', width=2)
 #     lasx, lasy = event.x, event.y
+
+# create legend
 topFrame = Frame(app)
 topFrame.pack(side ="top")
 
@@ -45,14 +66,23 @@ recyclerText.pack(side="left")
 recyclerLabel = Label(topFrame, text="Red", bg="red")
 recyclerLabel.pack(side="left")
 
+# create map
 canvas = Canvas(app, bg="#86bdd6", height=800, width=800)
 canvas.pack(side="bottom")
 
-canvas.create_oval((200-2, 200-2, 200+3, 200+3), fill='green') # waste is green
-canvas.create_oval((100, 200, 105,205), fill="yellow") # local sorter is yellow
-canvas.create_oval((600, 200, 600, 200), fill="orange") #regional sorter is orange
-canvas.create_oval((300, 500, 300,500), fill="red") #reycler is red
+# get waste objects
 
+for w in waste:
+    canvas.create_oval((w.getLatCord()-2, w.getLongCord()-2, w.getLatCord().get+3, w.getLongCord()+3), fill='green') # waste is green
+for localSort in localSorters:
+    canvas.create_oval((localSort.getLatCord()-2, localSort.getLongCord()-2, localSort.getLatCord().get+3, localSort.getLongCord()+3), fill='yellow') # local sorter is yellow
+for regSort in regionalSorters:
+    canvas.create_oval((regSort.getLatCord()-2, regSort.getLongCord()-2, regSort.getLatCord().get+3, regSort.getLongCord()+3), fill='orange') # regional sorter is orange
+for r in recyclers:
+    canvas.create_oval((r.getLatCord()-2, r.getLongCord()-2, r.getLatCord().get+3, r.getLongCord()+3), fill='red') # recycler is red
+
+# direct path
+for 
 # canvas.bind("<Button-1>", get_x_and_y)
 # canvas.bind("<B1-Motion>", draw_smth)
 
