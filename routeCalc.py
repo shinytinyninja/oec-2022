@@ -3,8 +3,10 @@ import queue
 import threading
 from plasticObject import plasticObject
 from validator import *
-from plasticObject import plasticObject
-
+from plasticObject import plasticObjec
+# ==============================================================================
+# Main Python File
+# ==============================================================================
 masterList = []
 bestQOR = []
 
@@ -21,8 +23,8 @@ def getBestQOR( threadID, currentLocation, listofDestinations):
     global bestQOR
     
     # Non Path Avoidence
-    mapHeight = 
-    mapWidth = 
+    mapHeight = 400
+    mapWidth = 400
     ##########################
     start = (currentLocation.get(),currentLocation.get)
     
