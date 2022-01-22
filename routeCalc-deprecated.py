@@ -4,9 +4,11 @@ import threading
 from plasticObject import plasticObject
 from validator import *
 from plasticObject import plasticObjec
+
 # ==============================================================================
-# Main Python File
+# Route Calculation File
 # ==============================================================================
+
 masterList = []
 bestQOR = []
 
@@ -16,6 +18,7 @@ listLong = 2
 listType = 3
 listValue = 4
 listRisk = 5
+
 
 def getBestQOR( threadID, currentLocation, listofDestinations):
     print(threadID)  
@@ -85,7 +88,7 @@ def findBest(current, bigList):
     three.join()
     four.join()
     
-def main():
+def routeCalc():
     print("Hello World")
     
     filename = input("name of the file your would like to run: ")
@@ -141,7 +144,4 @@ def main():
         finalFile.write("{},{},{},{},{},{}\n".format(idDesignation, item.getLatCord, item.getLongCord, item.getObjectType, item.getPlasticAmount, item.getRisk))
         idDesignation = idDesignation + 1
     finalFile.close()
-    
-if __name__ == "__main__":
-    main()
     

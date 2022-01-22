@@ -1,6 +1,3 @@
-from webbrowser import get
-
-
 class plasticObject:
     def __init__(self, objectID, objectType, latCord, longCord, plasticAmount, risk):
         self.objectID = objectID
