@@ -69,6 +69,7 @@ class router:
         for win in winners:
             if lowest == 0:
                 lowest = win[1]
+                lowestDest = win[0]
             elif win[1] < lowest:
                 lowest = win[1]  
                 lowestDest = win[0]
