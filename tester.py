@@ -2,9 +2,9 @@ from tkinter import *
 from router import *
 
 
-# file = input("Name of file: ")
+file = input("Name of file: ")
 
-file = "test_10_equal"
+# file = "test_10_equal"
 
 print(file)
 
