@@ -28,7 +28,7 @@ class pathThread(threading.Thread):
             hypo = math.hypot(abs(x1-x2), abs(y1-y2))/1000
             
             QOR = float(hypo) * float(dest.getRisk())
-            print("Thread: {} & QOR: {}".format(self.threadID, QOR))
+            # print("Thread: {} & QOR: {}".format(self.threadID, QOR))
             
             if len(self.bestQOR) == 0:
                 self.bestQOR = (dest, QOR)
