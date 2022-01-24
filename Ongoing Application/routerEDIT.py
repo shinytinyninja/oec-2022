@@ -34,6 +34,7 @@ class router:
     # Function for finding the best next destination
     # Using the "current" position of our boat, find the next best distination with lowest QOR score
     def findBest(self, current, bigList):
+        
         size = len(bigList)
         halfway = size/2
         halfway = int(halfway)
@@ -41,29 +42,49 @@ class router:
         quarter = halfway/2
         quarter = int(quarter)
         
-        list1 = bigList[0:quarter]
-        list2 = bigList[quarter:halfway]
-        list3 = bigList[halfway:halfway+quarter]
-        list4 = bigList[halfway+quarter:size]
+        eighth = quarter/2
+        eighth = int(eighth)
         
-        # print("Half = {} and Quarter = {}".format(halfway, quarter))
+        # list1 = bigList[0:eighth]
+        # list2 = bigList[eighth:quarter]
+        # list3 = bigList[quarter:quarter+eighth]
+        # list4 = bigList[quarter+eighth:halfway]
+        # list5 = bigList[halfway:halfway+eighth]
+        # list6 = bigList[halfway+eighth:halfway+quarter]
+        # list7 = bigList[halfway+quarter:halfway+quarter+eighth]
+        # list8 = bigList[halfway+quarter+eighth:size]
         
-        one = pathThread(1, current, list1)
-        two = pathThread(2, current, list2)
-        three = pathThread(3, current, list3)
-        four = pathThread(4, current, list4)
+        one = pathThread(1, current, bigList)
+        # two = pathThread(2, current, list2)
+        # three = pathThread(3, current, list3)
+        # four = pathThread(4, current, list4)
+        
+        # five = pathThread(1, current, list5)
+        # six = pathThread(1, current, list6)
+        # seven = pathThread(1, current, list7)
+        # eight = pathThread(1, current, list8)
         
         one.start()
-        two.start()
-        three.start()
-        four.start()
+        # two.start()
+        # three.start()
+        # four.start()
+        
+        # five.start()
+        # six.start()
+        # seven.start()
+        # eight.start()
         
         one.join()  
-        two.join() 
-        three.join()
-        four.join()
+        # two.join() 
+        # three.join()
+        # four.join()
         
-        winners = [one.getWinner(), two.getWinner(), three.getWinner(), four.getWinner()]
+        # five.join()
+        # six.join()
+        # seven.join()
+        # eight.join()
+        winners = [one.getWinner()]
+        # winners = [one.getWinner(), two.getWinner(), three.getWinner(), four.getWinner(), five.getWinner(), six.getWinner(), seven.getWinner(), eight.getWinner()]
         lowest = 0
         
         for win in winners:

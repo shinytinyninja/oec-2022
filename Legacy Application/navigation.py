@@ -5,7 +5,6 @@ from router import *
 # MAIN PY FILE OCEAN WASTE NAVIGATION PROGRAM
 # ==============================================================================
 
-
 def main():
     file = input("Name of file: ")
 
@@ -138,6 +137,7 @@ def main():
         )
 
     # Starts this bad boy up
+    print("done")
     app.mainloop()
 
 if __name__ == "__main__":
