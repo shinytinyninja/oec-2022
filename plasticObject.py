@@ -1,3 +1,8 @@
+# ==============================================================================
+# PlasticObject
+# Used as a general object to hold data regarding any object on our map
+# Waste, LocalSort, Regional Sort, Regional Recycling
+# ==============================================================================
 class plasticObject:
     def __init__(self, objectID, objectType, latCord, longCord, plasticAmount, risk):
         self.objectID = objectID

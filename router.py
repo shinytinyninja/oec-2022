@@ -23,6 +23,7 @@ class router:
         self.fileName = fileName
         self.inputList = []
         self.wastePlaces = []
+        self.fullWastePlaces = []
         self.localSortPlaces = []
         self.regSortPlaces = []
         self.regRecPlaces = []
@@ -44,7 +45,7 @@ class router:
         list3 = bigList[halfway:halfway+quarter]
         list4 = bigList[halfway+quarter:size]
         
-        print("Half = {} and Quarter = {}".format(halfway, quarter))
+        # print("Half = {} and Quarter = {}".format(halfway, quarter))
         
         one = pathThread(1, current, list1)
         two = pathThread(2, current, list2)
@@ -64,15 +65,18 @@ class router:
         winners = [one.getWinner(), two.getWinner(), three.getWinner(), four.getWinner()]
         lowest = 0
         
-        print("Winners")
-        print (winners)
+        # print("Winners")
+        # print (winners)
         for win in winners:
-            if lowest == 0:
-                lowest = win[1]
-                lowestDest = win[0]
-            elif win[1] < lowest:
-                lowest = win[1]  
-                lowestDest = win[0]
+            if len(win) == 0:
+                pass
+            else:
+                if lowest == 0:
+                    lowest = win[1]
+                    lowestDest = win[0]
+                elif win[1] < lowest:
+                    lowest = win[1]  
+                    lowestDest = win[0]
         
         self.masterList.append(lowestDest)
         
@@ -96,10 +100,10 @@ class router:
             mapObject = plasticObject(item[listID], item[listType], item[listLat], item[listLong], item[listValue], item[listRisk])
             
             #Generating list of waste sites
-            if mapObject.getObjectType() == "waste":
+            if mapObject.getObjectType() == "waste":                
                 self.wastePlaces.append(mapObject)
-                self.masterList.append(mapObject)
-                
+                self.fullWastePlaces.append(mapObject)
+                 
             #generating list of waste
             elif mapObject.getObjectType() == "local_sorting_facility":
                 self.localSortPlaces.append(mapObject)
@@ -117,7 +121,20 @@ class router:
         # Waste is already collected as it has been appended to master list
         # ======================================================================
         
-        print(self.masterList[-1].getObjectType())
+        # print("Length: {}".format(len(self.wastePlaces)))
+        #Removes the First Waste and Adds it to Master List
+        self.masterList.append(self.wastePlaces.pop(0))
+        
+        for i in range (0, len(self.wastePlaces) - 1):
+            #Find Waste Location
+            self.findBest(self.masterList[-1], self.wastePlaces)
+            
+            for i in range(0,len(self.wastePlaces)):
+                if self.wastePlaces[i].getLatCord() == self.masterList[-1].getLatCord() and self.wastePlaces[i].getLongCord() == self.masterList[-1].getLongCord():   
+                    self.wastePlaces.pop(i)
+                    break
+        
+        self.masterList.append(self.wastePlaces.pop(0))
         
         #Find Local Sorting
         self.findBest(self.masterList[-1], self.localSortPlaces)
@@ -127,7 +144,6 @@ class router:
         
         #Find Regional Recycling
         self.findBest(self.masterList[-1], self.regRecPlaces)
-        
         
         # minQor = 100
         # for pair in masterList:
@@ -143,7 +159,7 @@ class router:
         finalFile.close()
         
     def getWaste(self):
-        return self.wastePlaces
+        return self.fullWastePlaces
     
     def getLocalSort(self):
         return self.localSortPlaces
