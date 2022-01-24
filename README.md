@@ -1,3 +1,10 @@
 # oec-2022
 OEC 2022
-Team Pikachu
+Ontario Engineering Competition
+
+## Design Problem
+
+## Team Members
+- Bartosh 
+
+- Jeff

@@ -23,6 +23,7 @@ class router:
         self.fileName = fileName
         self.inputList = []
         self.wastePlaces = []
+        self.wastePlacesDict = {}
         self.fullWastePlaces = []
         self.localSortPlaces = []
         self.regSortPlaces = []
@@ -65,8 +66,6 @@ class router:
         winners = [one.getWinner(), two.getWinner(), three.getWinner(), four.getWinner()]
         lowest = 0
         
-        # print("Winners")
-        # print (winners)
         for win in winners:
             if len(win) == 0:
                 pass
@@ -90,9 +89,8 @@ class router:
             print("CSV Error")
             exit()
         
-        #Giving access to routeCalc to modify masterList.
-        #Adds inital waste sites as they are to be visited
-        # global masterList
+        # Giving access to routeCalc to modify masterList.
+        # Adds inital waste sites as they are to be visited
         
         #Generating list of all destinations
         for item in self.inputList:
@@ -102,6 +100,7 @@ class router:
             #Generating list of waste sites
             if mapObject.getObjectType() == "waste":                
                 self.wastePlaces.append(mapObject)
+                self.wastePlacesDict[mapObject.getCode()] = mapObject
                 self.fullWastePlaces.append(mapObject)
                  
             #generating list of waste
@@ -116,25 +115,23 @@ class router:
             else: #item[3] == "regional_recycling_facility"
                 self.regRecPlaces.append(mapObject)
 
-        #Collect Waste
+        # Collect Waste
         # ======================================================================
         # Waste is already collected as it has been appended to master list
         # ======================================================================
         
-        # print("Length: {}".format(len(self.wastePlaces)))
         #Removes the First Waste and Adds it to Master List
-        self.masterList.append(self.wastePlaces.pop(0))
+        key = list(self.wastePlacesDict.keys())[0]
+        self.masterList.append(self.wastePlacesDict.pop(key))
         
-        for i in range (0, len(self.wastePlaces) - 1):
+        for i in range (0, len(self.wastePlacesDict) - 1):
             #Find Waste Location
-            self.findBest(self.masterList[-1], self.wastePlaces)
+            self.findBest(self.masterList[-1], list(self.wastePlacesDict.values()))
+            # print(self.wastePlacesDict.keys())
+            self.wastePlacesDict.pop(self.masterList[-1].getCode())
             
-            for i in range(0,len(self.wastePlaces)):
-                if self.wastePlaces[i].getLatCord() == self.masterList[-1].getLatCord() and self.wastePlaces[i].getLongCord() == self.masterList[-1].getLongCord():   
-                    self.wastePlaces.pop(i)
-                    break
-        
-        self.masterList.append(self.wastePlaces.pop(0))
+        key = list(self.wastePlacesDict.keys())[0]
+        self.masterList.append(self.wastePlacesDict.pop(key))
         
         #Find Local Sorting
         self.findBest(self.masterList[-1], self.localSortPlaces)
@@ -144,11 +141,6 @@ class router:
         
         #Find Regional Recycling
         self.findBest(self.masterList[-1], self.regRecPlaces)
-        
-        # minQor = 100
-        # for pair in masterList:
-        #     if(pair[0] < minQor):
-        #         minQor == pair[0]
         
         #Writing to final CSV
         idDesignation = 0

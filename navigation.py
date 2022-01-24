@@ -4,6 +4,8 @@ from router import *
 # ==============================================================================
 # MAIN PY FILE OCEAN WASTE NAVIGATION PROGRAM
 # ==============================================================================
+
+
 def main():
     file = input("Name of file: ")
 
@@ -114,16 +116,27 @@ def main():
         elif(obi.getObjectType() == "regional_recycling_facility"):
             cdawg = "red"
 
-        canvas.create_oval((((int(obi.getLatCord())+200)*2)-1, ((int(obi.getLongCord())+200)*2)-2,
-                            ((int(obi.getLatCord())+200)*2)+2, ((int(obi.getLongCord())+200)*2)+2), fill=cdawg)
+        canvas.create_oval(
+            (((obi.getLatCord()+200)*2)-1,
+             ((obi.getLongCord()+200)*2)-2,
+             ((obi.getLatCord()+200)*2)+2,
+             ((obi.getLongCord()+200)*2)+2),
+            fill=cdawg
+        )
+
         itemCount = itemCount + 1
 
     # Draws the direct path between destinations
     for counter in range(0, len(routeList) - 1):
         nextDest = routeList[counter + 1]
-        canvas.create_line((((int(routeList[counter].getLatCord())+200)*2)-1, ((int(routeList[counter].getLongCord())+200)*2)-1, ((
-            int(nextDest.getLatCord())+200)*2)+1, ((int(nextDest.getLongCord())+200)*2)+1), fill='black', width="1")
-    
+        canvas.create_line(
+            (((routeList[counter].getLatCord()+200)*2)-1,
+             ((routeList[counter].getLongCord()+200)*2)-1,
+             ((nextDest.getLatCord()+200)*2)+1,
+             ((nextDest.getLongCord()+200)*2)+1),
+            fill='black', width="1"
+        )
+
     # Starts this bad boy up
     app.mainloop()
 

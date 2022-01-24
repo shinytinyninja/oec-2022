@@ -25,13 +25,13 @@ class plasticObject:
         self.objectType = myObjectType
 
     def getLatCord(self):
-        return self.latCord
+        return int(self.latCord)
 
     def setLatCord(self, myLatCord):
         self.latCord = myLatCord
 
     def getLongCord(self):
-        return self.longCord
+        return int(self.longCord)
 
     def setLongCord(self, myLongCord):
         self.longCord = myLongCord
@@ -47,3 +47,6 @@ class plasticObject:
 
     def setRisk(self, myRisk):
         self.risk = myRisk
+    
+    def getCode(self):
+        return str(self.latCord) + str(self.longCord)
