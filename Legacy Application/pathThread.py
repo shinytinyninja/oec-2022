@@ -29,7 +29,6 @@ class pathThread(threading.Thread):
             
             riskLevel = float(dest.getRisk()) if float(dest.getRisk()) > 0 else 1
             QOR = float(hypo) * riskLevel
-            # print("Thread: {} & QOR: {}".format(self.threadID, QOR))
             
             if len(self.bestQOR) == 0:
                 self.bestQOR = (dest, QOR)
@@ -37,7 +36,7 @@ class pathThread(threading.Thread):
                 self.bestQOR = (dest, QOR)
     
     def getWinner(self):
-        return self.bestQOR
+        return self.bestQOR[0]
     
         
         

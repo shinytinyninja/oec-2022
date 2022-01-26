@@ -56,13 +56,12 @@ def main():
     masterList.append(wasteDict.pop(key))
     
     # Waste For-Loop
+    
     for i in range(numWasteDest - 2):
         # Find Waste Location
         jobs = []
-        taste = []
         multiQueue = multiprocessing.Queue()
         workerData = list(listSplit(list(wasteDict.values()), numWorkers))
-        print(workerData)
         
         for i in range(numWorkers):
             p = multiprocessing.Process(target=worker, args=(masterList[-1], workerData[i], multiQueue,))
@@ -72,7 +71,6 @@ def main():
         for proc in jobs:
             proc.join()
 
-        # Add Something to master list here
         lowestQOR = 0
         
         while multiQueue.qsize() != 0:
@@ -91,16 +89,16 @@ def main():
         wasteDict.pop(masterList[-1].getCode())
 
     # Pop last waste location left as final waste destination
-    print("___________________________")
-    print(list(wasteDict.keys()))
     key = list(wasteDict.keys())[0]
     masterList.append(wasteDict.pop(key))
     
-    for i in masterList:
-        print(i.getCode())
+    for dest in masterList:
+        print("Waste: Lat: {} & Long: {}".format(dest.getLatCord(), dest.getLongCord()))
     # for dest in waste:
     #     for workerID in range(numWorkers):
-            # graphics()
-
+    
+    print("done")
+    # graphics(quad.getAllDest(), len(quad.getWasteDest()), masterList)
+    
 if __name__ == "__main__":
     main()

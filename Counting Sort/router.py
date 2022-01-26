@@ -48,7 +48,7 @@ class router:
             print("Reading CSV")
         try:
             self.inputList = read_from_csv(
-                os.getcwd() + "/test_cases/{}".format(self.fileName))
+                os.getcwd() + "test_cases/{}".format(self.fileName))
 
         except:
             print("CSV Error")

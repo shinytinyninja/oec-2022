@@ -1,9 +1,10 @@
 import os
+from pathlib import Path
+from time import sleep
 from plasticObject import plasticObject
-from validator import *
+from validator import read_from_csv
 from plasticObject import plasticObject
-from pathThread import pathThread
-
+import math
 # STATIC VARIABLES, NOT TO BE CHANGED
 listID = 0
 listLat = 1
@@ -16,7 +17,6 @@ listRisk = 5
 # Route Calculation Function
 # This will, using multi-threading computer the path of lowest QOR Score
 # ==============================================================================
-
 
 class router:
     # Constructor of class.
@@ -37,25 +37,40 @@ class router:
     # Function for finding the best next destination
     # Using the "current" position of our boat, find the next best distination with lowest QOR score
     def findBest(self, current, bigList):
-        one = pathThread(1, current, bigList)
-        one.start()
-        one.join()
+        bestQOR = ()
+        x1_lat, y1_lon = int(current.getLatCord()), int(current.getLongCord())
         
-        self.masterList.append(one.getWinner())
+        for dest in bigList:  
+            x2_lat, y2_lon = int(dest.getLatCord()), int(dest.getLongCord())
+            distance = ((((x2_lat-x1_lat)**2) + ((y2_lon-y1_lon)**2)) **0.5 )
+  
+            riskLevel = float(dest.getRisk()) if float(dest.getRisk()) > 0 else 1
+            QOR = float(distance) * riskLevel
+            
+            if len(bestQOR) == 0:
+                bestQOR = (dest, QOR)
+            elif (QOR < bestQOR[1]):
+                bestQOR = (dest, QOR)
+        
+        self.masterList.append(bestQOR[0])
 
     def routeCalc(self):
-        if self.mode == "Y":
-            print("Reading CSV")
+        p = Path(os.getcwd())
+        os.chdir(p.parent)
+            
         try:
-            self.inputList = read_from_csv(
-                os.getcwd() + "/test_cases/{}".format(self.fileName))
-
+            print("FILENAME: {}".format(self.fileName))
+            file = str(p) + "/test_cases/{}.csv".format(self.fileName)
+                
+            res = []
+            with open(file) as csv_file:
+                node = [line.split(",") for line in csv_file]
+                for i, info in enumerate(node):
+                    res.append(info) 
+            self.inputList = res   
         except:
             print("CSV Error")
             exit()
-
-        # Giving access to routeCalc to modify masterList.
-        # Adds inital waste sites as they are to be visited
 
         # Generating list of all destinations
         for item in self.inputList:
@@ -108,15 +123,6 @@ class router:
 
         # Find Regional Recycling
         self.findBest(self.masterList[-1], self.regRecPlaces)
-
-        # Writing to final CSV
-        idDesignation = 0
-        finalFile = open("finalFile.csv", "w")
-        for item in self.masterList:
-            finalFile.write("{},{},{},{},{},{}\n".format(idDesignation, item.getLatCord(
-            ), item.getLongCord(), item.getObjectType(), item.getPlasticAmount(), item.getRisk()))
-            idDesignation = idDesignation + 1
-        finalFile.close()
 
     def getWaste(self):
         return self.fullWastePlaces

@@ -64,7 +64,7 @@ class quadSplit():
                 self.regRecPlaces.append(mapObject)
             
     def getAllDest(self):
-        return self.allDest
+        return self.wasteDest + self.regSortPlaces + self.regRecPlaces
     
     def getWasteDest(self):
         return self.wasteDest

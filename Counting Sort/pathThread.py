@@ -1,14 +1,13 @@
+import threading
 import math
-import multiprocessing
 
-class pathProcess(multiprocessing.Process):
-    def __init__(self, threadID, current, listOfDests, winner):
-        super(pathProcess, self).__init__()
+class pathThread(threading.Thread):
+    def __init__(self, threadID, current, listOfDests):
+        super(pathThread, self).__init__()
         self.threadID = threadID
         self.current = current
         self.listOfDests = listOfDests
         self.bestQOR = ()
-        self.winner = winner
         
     def run(self): 
         x1_lat, y1_lon = self.current.getLatCord(), self.current.getLongCord()
@@ -30,16 +29,14 @@ class pathProcess(multiprocessing.Process):
             
             riskLevel = float(dest.getRisk()) if float(dest.getRisk()) > 0 else 1
             QOR = float(hypo) * riskLevel
-            # print("Thread: {} & QOR: {}".format(self.threadID, QOR))
             
             if len(self.bestQOR) == 0:
                 self.bestQOR = (dest, QOR)
             elif (QOR < self.bestQOR[1]):
                 self.bestQOR = (dest, QOR)
     
-        self.winner[self.threadID] = self.bestQOR
-    
-
+    def getWinner(self):
+        return self.bestQOR[0]
     
         
         

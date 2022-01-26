@@ -1,8 +1,30 @@
 from tkinter import *
+from router import *
+
 # ==============================================================================
 # MAIN PY FILE OCEAN WASTE NAVIGATION PROGRAM
 # ==============================================================================
-def graphics(allDest, numWasteDest, routeList):
+
+def main():
+    file = input("Name of file: ")
+
+    mode = "N"
+
+    # Initialize Router Class Object. To be used for calculations of path.
+    rout = router(file, mode)
+
+    # Perform Main Calculations
+    rout.routeCalc()
+
+    # Getting lists of all points
+    waste = rout.getWaste()
+    localSorters = rout.getLocalSort()
+    regionalSorters = rout.getRegionalSort()
+    recyclers = rout.getRegionalRec()
+
+    # Get the desired boat route as a list
+    routeList = rout.getMaster()
+
     # Create application window
     app = Tk("OEC-2022")
     app.geometry("850x950")
@@ -67,7 +89,7 @@ def graphics(allDest, numWasteDest, routeList):
     recyclerLabel.pack(side="left")
 
     recyclerLabel = Label(
-        stats, text="Trash Picked Up: {}".format(numWasteDest), font=comicText)
+        stats, text="Trash Picked Up: {}".format(len(waste)), font=comicText)
     recyclerLabel.pack(side="left")
 
     recyclerLabel = Label(
@@ -79,9 +101,11 @@ def graphics(allDest, numWasteDest, routeList):
     canvas.pack(side="bottom")
 
     # Get all objects
+    biggie = []
+    biggie = waste + localSorters + regionalSorters + recyclers
     itemCount = 0
 
-    for obi in allDest:
+    for obi in biggie:
         if(obi.getObjectType() == "waste"):
             cdawg = "yellow" if itemCount == 0 else "green"
         elif(obi.getObjectType() == "local_sorting_facility"):
@@ -115,3 +139,6 @@ def graphics(allDest, numWasteDest, routeList):
     # Starts this bad boy up
     print("done")
     app.mainloop()
+
+if __name__ == "__main__":
+    main()
